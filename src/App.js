@@ -1,21 +1,45 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Login, Signup } from "./pages";
-import { Counter } from "./components";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "./redux/auth/authSlice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { selectCurrentUser, login, logout } from "./redux/auth/authSlice";
+import { auth, onAuthStateChanged } from "./firebase.config";
+
+
 import "./App.scss";
 
 function App() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const user = useSelector(selectCurrentUser);
+
+  if(!user) {
+    navigate("/auth/login")
+  }
+  console.log(user)
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (userAuth) => {
+      if (userAuth) {
+        dispatch(
+          login({
+            email: userAuth.email,
+            uid: userAuth.uid,
+            displayName: userAuth.displayName,
+          })
+        );
+
+
+      } else {
+        dispatch(logout());
+      }
+    });
+  }, []);
+
 
   return (
-    <Router>
-      <Routes>
-        <Route exact path="/auth/login" element={<Login />} />
-        <Route exact path="/auth/signup" element={<Signup />} />
-        <Route exact path="/counter" element={<Counter />} />
-      </Routes>
-    </Router>
+    "hiii"
   );
 }
 

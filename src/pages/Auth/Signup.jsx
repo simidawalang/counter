@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Input } from "../../components";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { ref, uploadBytesResumable, getDownloadUrl } from "firebase/storage";
-import { auth, db, storage } from "../../firebase.config";
-import { doc, setDoc } from "firebase/firestore";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import { auth, createUserWithEmailAndPassword } from "../../firebase.config";
+import { signup } from "../../redux/auth/authSlice";
+import { updateProfile } from "firebase/auth";
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -46,46 +45,36 @@ const Signup = () => {
 
     setLoading(true);
     try {
-      const userCredentials = await createUserWithEmailAndPassword(
+      const { user } = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
 
-      const user = userCredentials.user;
-      
-      const storageRef = ref(storage, user.uid);
-
-      // update user profile
-       updateProfile(user, {
-        displayName,
-        username,
-        email,
-      });
-
-      // store user data in database
-      setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
+      await updateProfile(user, {
         displayName,
         email,
       });
 
-      setTimeout(() => {
-        navigate("/counter");
-      }, 1500);
-      setLoading(false);
+      dispatch(
+        signup({
+          uid: user.uid,
+          displayName,
+          email,
+        })
+      );
       toast.success("Account successfully created");
       console.log(user);
-      navigate("/counter");
+      setTimeout(() => {
+        navigate("/counter")
+      }, 2000);
 
     } catch (e) {
-      
       if (e.message === "Firebase: Error (auth/email-already-in-use).") {
         toast.error("Email already in use");
       }
-      setLoading(false)
     }
-
+    setLoading(false);
   };
 
   useEffect(() => {

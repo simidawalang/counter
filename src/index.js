@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route, Navigate  } from "react-router-dom";
+import { Counter } from "./components";
+import { Login, Signup } from "./pages";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -10,7 +13,14 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <React.StrictMode>
-      <App />
+    <Router>
+      <Routes>
+        <Route exact path="/auth/login" element={<Login />} />
+        <Route exact path="/auth/signup" element={<Signup />} />
+        <Route exact path="/counter" element={<Counter />} />
+        <Route path="*" element={<Navigate to="/auth/login" replace />} />
+      </Routes>
+    </Router>
     </React.StrictMode>
   </Provider>
 );

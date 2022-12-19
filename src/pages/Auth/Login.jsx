@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Button, Input } from "../../components";
-import { login } from "../../redux/auth/authSlice";
+import { signup } from "../../redux/auth/authSlice";
 import { auth } from "../../firebase.config";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,10 +12,13 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const handleEmail = (e) => {
     const { value } = e.target;
@@ -30,26 +33,32 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(1)
+
     setLoading(true);
     try {
-      const userCredentials = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredentials.user;
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
 
+      dispatch(
+        signup({
+          uid: user.uid,
+          email,
+        })
+      );
+      toast.success("Successfully logged in");
+      console.log(user);
       setTimeout(() => {
         navigate("/counter");
-      }, 1500);
-
-
-      console.log(user);
+      }, 2000);
     } catch (e) {
-      toast.error("Fail");
+      console.log(e.error)
+      toast.error("Account doesn't exist");
     }
     setLoading(false);
   };
 
   return (
     <div>
+      <ToastContainer />
       <form className="auth-form" onSubmit={handleSubmit}>
         <h3>Login</h3>
         <Input
@@ -59,13 +68,17 @@ const Login = () => {
           onChange={handleEmail}
           required
         />
-        <Input
-          type={`${showPassword ? "text" : "password"}`}
-          placeholder="Password"
-          value={password}
-          onChange={handlePassword}
-          required
-        />
+        <div>
+          <Input
+            type={`${showPassword ? "text" : "password"}`}
+            placeholder="Password"
+            value={password}
+            onChange={handlePassword}
+            required
+          />
+          <span onClick={togglePassword}>x</span>
+        </div>
+
         <Button content={`${loading ? "Loading" : "Login"}`} />
       </form>
     </div>
