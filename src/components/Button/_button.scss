@@ -1,0 +1,15 @@
+.btn {
+  color: $white;
+  border: 0;
+  border-radius: 4px;
+  padding: 8px 12px;
+  &:hover {
+    cursor: pointer;
+  }
+  &.btn-green {
+    background: $green;
+  }
+  &.btn-red {
+    background: $red;
+  }
+}

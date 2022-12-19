@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Button, Input } from "../../components";
-import { signup } from "../../redux/auth/authSlice";
-import { auth } from "../../firebase.config";
+import { login } from "../../redux/auth/authSlice";
+import {
+  auth,
+} from "../../firebase.config";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -39,48 +41,63 @@ const Login = () => {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
 
       dispatch(
-        signup({
+        login({
           uid: user.uid,
           email,
         })
       );
+
       toast.success("Successfully logged in");
       console.log(user);
       setTimeout(() => {
         navigate("/counter");
-      }, 2000);
+      }, 1500);
     } catch (e) {
-      console.log(e.error)
+      console.log(e.error);
       toast.error("Account doesn't exist");
     }
     setLoading(false);
   };
 
   return (
-    <div>
+    <div className="auth-page">
       <ToastContainer />
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h3>Login</h3>
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={handleEmail}
-          required
-        />
-        <div>
+      <div className="auth-form__container">
+        <h3 className="auth-form__header">Login</h3>
+        <form className="auth-form" onSubmit={handleSubmit}>
           <Input
-            type={`${showPassword ? "text" : "password"}`}
-            placeholder="Password"
-            value={password}
-            onChange={handlePassword}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={handleEmail}
             required
           />
-          <span onClick={togglePassword}>x</span>
-        </div>
+          <div className="password-input">
+            <Input
+              type={`${showPassword ? "text" : "password"}`}
+              placeholder="Password"
+              value={password}
+              onChange={handlePassword}
+              required
+            />
+            <Button
+              type="button"
+              className="toggle-password"
+              onClick={togglePassword}
+              content={showPassword ? "Hide" : "Show"}
+            />
+          </div>
 
-        <Button content={`${loading ? "Loading" : "Login"}`} />
-      </form>
+          <Button
+            className="auth-btn"
+            bgColor="green"
+            content={`${loading ? "Loading" : "Login"}`}
+          />
+          <div className="form-link">
+            <Link to="/auth/signup">Don't have an account? Sign up</Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

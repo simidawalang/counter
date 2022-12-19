@@ -6,6 +6,8 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  setPersistence,
+  browserSessionPersistence
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -29,4 +31,6 @@ export {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  browserSessionPersistence,
+  setPersistence
 };

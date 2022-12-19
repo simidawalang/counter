@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Input } from "../../components";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,17 +16,12 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [displayName, setDisplayName] = useState("");
 
   const handleDisplayName = (e) => {
     const { value } = e.target;
     setDisplayName(value);
-  };
-  const handleUsername = (e) => {
-    const { value } = e.target;
-    setUsername(value);
   };
 
   const handleEmail = (e) => {
@@ -37,6 +32,10 @@ const Signup = () => {
   const handlePassword = (e) => {
     const { value } = e.target;
     setPassword(value);
+  };
+
+  const togglePassword = () => {
+    setShowPassword((prev) => !prev);
   };
 
   const handleSubmit = async (e) => {
@@ -66,9 +65,8 @@ const Signup = () => {
       toast.success("Account successfully created");
       console.log(user);
       setTimeout(() => {
-        navigate("/counter")
+        navigate("/counter");
       }, 2000);
-
     } catch (e) {
       if (e.message === "Firebase: Error (auth/email-already-in-use).") {
         toast.error("Email already in use");
@@ -82,39 +80,50 @@ const Signup = () => {
   }, [currentUser]);
 
   return (
-    <div>
+    <div className="auth-page">
       <ToastContainer />
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          placeholder="Display Name"
-          value={displayName}
-          onChange={handleDisplayName}
-          required
-        />
-        <Input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={handleUsername}
-          required
-        />
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={handleEmail}
-          required
-        />
-        <Input
-          type={`${showPassword ? "text" : "password"}`}
-          placeholder="Password"
-          value={password}
-          onChange={handlePassword}
-          required
-        />
-        <Button content={`${loading ? "Loading" : "Sign up"}`} />
-      </form>
+      <div className="auth-form__container">
+        <h3 className="auth-form__header">Create Account</h3>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <Input
+            type="text"
+            placeholder="Display Name"
+            value={displayName}
+            onChange={handleDisplayName}
+            required
+          />
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={handleEmail}
+            required
+          />
+          <div className="password-input">
+            <Input
+              type={`${showPassword ? "text" : "password"}`}
+              placeholder="Password"
+              value={password}
+              onChange={handlePassword}
+              required
+            />
+            <Button
+              type="button"
+              className="toggle-password"
+              onClick={togglePassword}
+              content={showPassword ? "Hide" : "Show"}
+            />
+          </div>
+          <Button
+            className="auth-btn"
+            bgColor="green"
+            content={`${loading ? "Loading" : "Sign up"}`}
+          />
+          <div className="form-link">
+            <Link to="/auth/login">Already have an account? Log in</Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

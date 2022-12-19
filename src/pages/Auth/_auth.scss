@@ -1,5 +1,62 @@
-.auth-form {
+.auth-page {
+  & .auth-form__container {
+    max-width: 400px;
+    position: relative;
+    top: 30vh;
+    margin: auto;
+  }
+
+  & .auth-form__header {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2rem;
+  }
+  & .auth-form {
+    background: $darkblue;
+    border-radius: 10px;
+    padding: 2rem;
     & input {
-        display: block;
+      border: 0;
+      padding: 6px 10px;
+      width: 100%;
     }
+
+    & input[type="text"],
+    input[type="email"] {
+      margin-bottom: 20px;
+    }
+    & .password-input {
+      display: flex;
+      justify-content: stretch;
+      border-radius: 4px;
+      & input {
+        border: none;
+        flex-grow: 1;
+        border-radius: 4px 0 0 4px;
+
+        margin: 0;
+      }
+      & .toggle-password {
+        color: #112211;
+        border-radius: 0 4px 4px 0;
+      }
+    }
+
+    & .auth-btn {
+      width: 100%;
+      margin-top: 40px;
+    }
+
+    & a {
+      margin-top: 1rem;
+    }
+    & .form-link {
+      text-align: center;
+      margin-top: 20px;
+      & a {
+        color: $white;
+        font-size: 0.7rem;
+      }
+    }
+  }
 }

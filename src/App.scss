@@ -1,7 +1,22 @@
+@import "variables";
+
+@import "components/Button/button";
+@import "components/Input/input";
+@import "components/Counter/counter";
+
+@import "pages/Auth/_auth.scss";
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@import url("./pages/Auth/_auth.scss");
+body {
+  background-color: #ddd;
+}
+
+a,
+a:hover {
+  text-decoration: none;
+}
