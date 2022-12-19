@@ -1,9 +1,12 @@
 .auth-page {
   & .auth-form__container {
-    max-width: 400px;
+    max-width: 300px;
     position: relative;
     top: 30vh;
     margin: auto;
+    @media screen and (min-width: 768px) {
+      max-width: 400px;
+    }
   }
 
   & .auth-form__header {

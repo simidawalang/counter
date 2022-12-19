@@ -48,7 +48,6 @@ const Login = () => {
       );
 
       toast.success("Successfully logged in");
-      console.log(user);
       setTimeout(() => {
         navigate("/counter");
       }, 1500);

@@ -15,9 +15,8 @@ function App() {
   const user = useSelector(selectCurrentUser);
 
   if(!user) {
-    navigate("/auth/login")
+    navigate("/auth/login");
   }
-  console.log(user)
 
   useEffect(() => {
     onAuthStateChanged(auth, (userAuth) => {

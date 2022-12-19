@@ -63,7 +63,6 @@ const Signup = () => {
         })
       );
       toast.success("Account successfully created");
-      console.log(user);
       setTimeout(() => {
         navigate("/counter");
       }, 2000);

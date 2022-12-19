@@ -19,10 +19,13 @@
   & .counter {
     background-color: $darkblue;
     color: $white;
-    max-width: 400px;
+    max-width: 270px;
     margin: auto;
     border-radius: 10px;
     padding: 2rem;
+    @media screen and (min-width: 768px) {
+        max-width: 400px;
+    }
     & .count-tracker {
       & .live-count {
         text-align: center;
