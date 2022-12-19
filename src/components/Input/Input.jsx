@@ -9,6 +9,7 @@ const Input = ({ type, onChange, value, placeholder, required }) => {
       onChange={onChange}
       placeholder={placeholder}
       required={required}
+      autoComplete="true"
     />
   );
 };
